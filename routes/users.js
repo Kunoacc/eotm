@@ -1,28 +1,14 @@
-var express = require('express');
-var router = express.Router();
-let Kinvey = require('kinvey-node-sdk');
+let express = require('express');
+let router = express.Router();
 let parse = require('body-parser');
 let parser = parse.urlencoded({extended: false});
-require('dotenv').config();
+let HomeController = require('../controllers/homeController');
+let AuthMiddleware = require('../middleware/authMiddleware');
+require('../controllers/authController');
 
-Kinvey.initialize({
-    appKey: process.env.APP_KEY,
-    appSecret: process.env.APP_SECRET
-});
 
-//GET users listing.
-let auth = function (req, res, next) {
-    if (!Kinvey.User.getActiveUser()){
-      let backURL = req.header('Referer') || '/';
-      return res.redirect(backURL)
-    }
-    return next();
-};
-router.use(auth);
+router.use(AuthMiddleware.isNotLoggedIn);
 
-router.get('/', function(req, res, next) {
-  res.render('home/index', {data: Kinvey.User.getActiveUser().data});
-  console.log(Kinvey.User.getActiveUser().data);
-});
+router.get('/', HomeController.home);
 
 module.exports = router;
