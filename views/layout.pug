@@ -41,3 +41,9 @@ html(lang='en')
         //Custom JS
         script(src='/javascripts/main.js')
 
+        script.
+            if(notLoggedIn){
+                notie.alert({type: 'error', text: 'Better login', time: 2});
+                $('nav').css('display', 'none');
+            }
+

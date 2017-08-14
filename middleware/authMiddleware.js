@@ -1,5 +1,4 @@
 const Kinvey = require('kinvey-node-sdk');
-const session = require('express-session');
 
 exports.isLoggedIn = function (req, res, next) {
         if (Kinvey.User.getActiveUser()){
@@ -18,6 +17,14 @@ exports.isNotLoggedIn = function (req, res, next) {
     res.redirect(backURL)
 };
 
-exports.hasRole = function (role) {
-
+exports.hasRole = function (req, res, next, role) {
+    if (this.isLoggedIn){
+        let currentRole = Kinvey.User.getActiveUser().data.role;
+        if (currentRole === role){
+            return next();
+        }
+        let backURL = req.header('Referer') || '/';
+        req.session.hasRole = false;
+        res.redirect(backURL);
+    }
 };

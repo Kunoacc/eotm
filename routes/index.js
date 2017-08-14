@@ -6,7 +6,6 @@ let AuthController = require('../controllers/authController');
 let AuthMiddleware = require('../middleware/authMiddleware');
 let PagesController = require('../controllers/pagesController');
 
-
 //Authentication Middleware.
 /*router.use(AuthMiddleware.isLoggedIn);*/
 
