@@ -21,6 +21,7 @@ exports.hasRole = function (req, res, next, role) {
     if (this.isLoggedIn){
         let currentRole = Kinvey.User.getActiveUser().data.role;
         if (currentRole === role){
+            req.session.hasRole = true;
             return next();
         }
         let backURL = req.header('Referer') || '/';
